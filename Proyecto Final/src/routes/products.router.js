@@ -43,19 +43,6 @@ router.get("/:pid", async (req, res) => {
     }
 });
 
-router.post("/", async (req, res) => {
-    const nuevoProducto = req.body;
-    products.push(nuevoProducto);
-    console.log(nuevoProducto);
-
-    try {
-        await productManager.addProduct(nuevoProducto),
-        res.status(201).json({message: "Producto agregado exitosamente"});
-    } catch (error) {
-        console.log("error al agregar un producto ", error);
-        res.status(500).json({error: "error del servidor"});
-    }
-})
 
 //3) Agregar nuevo producto: 
 

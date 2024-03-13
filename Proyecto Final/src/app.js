@@ -10,7 +10,8 @@ const FileStore = require("session-file-store");
 const fileStore = FileStore(session);
 const MongoStore = require("connect-mongo");
 const cookieParser = require("cookie-parser");
-
+const initializePassport = require("./config/passport.config.js");
+const passport = require("passport");
 
 const sessionRouter = require("./routes/sessions.router.js");
 const userRouter = require("../src/routes/user.router.js");
@@ -19,6 +20,7 @@ const cartsRouter = require("./routes/carts.router.js");
 const viewsRouter = require("./routes/views.router.js");
 const path = require("path");
 require("./database.js");
+
 //Midleware
 
 app.use(express.static("./public"));
@@ -40,6 +42,11 @@ app.use(session({
     })
 
 }))
+
+//Cambios passport: 
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 //handlebars
 

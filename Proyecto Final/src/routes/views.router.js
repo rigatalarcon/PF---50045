@@ -5,6 +5,31 @@ const CartManager = require("../controllers/cart-manager-db.js");
 const productManager = new ProductManager();
 const cartManager = new CartManager();
 
+// Ruta para el formulario de login
+router.get("/login", (req, res) => {
+    if (req.session.login) {
+        return res.redirect("/profile");
+    }
+    res.render("login");
+});
+
+// Ruta para el formulario de registro
+router.get("/register", (req, res) => {
+    if (req.session.login) {
+        return res.redirect("/profile");
+    }
+    res.render("register");
+});
+
+// Ruta para la vista de perfil
+router.get("/profile", (req, res) => {
+    if (!req.session.login) {
+        return res.redirect("/login");
+    }
+    res.render("profile", { user: req.session.user });
+});
+
+
 router.get("/products", async (req, res) => {
     try {
         const { page = 1, limit = 2 } = req.query;
@@ -19,6 +44,7 @@ router.get("/products", async (req, res) => {
         });
 
         res.render("products", {
+            user: req.session.user,
             productos: nuevoArray,
             hasPrevPage: productos.hasPrevPage,
             hasNextPage: productos.hasNextPage,
