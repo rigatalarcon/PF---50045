@@ -5,7 +5,7 @@ const { isValidPassword } = require("../utils/hashbcryp.js");
 const passport = require("passport");
 
 //Login
-/*
+
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -28,7 +28,7 @@ router.post("/login", async (req, res) => {
         res.status(400).send({ error: "Error en el login" });
     }
 })
-*/
+
 
 ///Version con Passport: 
 
@@ -59,6 +59,17 @@ router.get("/logout", (req, res) => {
         req.session.destroy();
     }
     res.redirect("/login");
+})
+
+//Version para GitHub:
+
+router.get("/github", passport.authenticate("github", {scope: ["user:email"]}) ,async (req, res)=> {})
+
+router.get("/githubcallback", passport.authenticate("github", {failureRedirect: "/login"}) ,async (req, res)=> {
+    //La estrategia de GitHub me va a retornar el usuario, entonces lo agregamos a nuestra session. 
+    req.session.user = req.user;
+    req.session.login = true;
+    res.redirect("/profile");
 })
 
 module.exports = router;
