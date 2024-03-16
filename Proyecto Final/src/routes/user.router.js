@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
     try {
         const existeUsuario = await UserModel.findOne({email:email});
         if(existeUsuario) {
-            return res.status(400).send({error: "El email ya esta usado, amigooooo"});
+            return res.status(400).send({error: "email no disponible"});
         }
 
         //Creamos un nuevo usuario: 
