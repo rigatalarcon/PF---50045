@@ -5,69 +5,69 @@ const { isValidPassword } = require("../utils/hashbcryp.js");
 const passport = require("passport");
 const generateToken = require("../utils/jsonwebtoken.js");
 
+//Login de usuario con Session: 
+
+router.get("/login", (req, res) => {
+    let usuario = req.query.usuario; 
+
+    req.session.usuario = usuario; 
+    res.send("Guardamos el usuario por medio de query");
+})
+
+//Verificamos el usuario: 
+
+router.get("/user", (req, res) => {
+    if(req.session.usuario) {
+        return res.send(`El usuario registrado es el siguiente: 
+        ${req.session.usuario}`);
+    } 
+
+    res.send("No tenemos un usuario registrado!");
+
+})
+
+// esto estaba en APP.JS -------------------
 
 //Login con JSON Web Token
 
-router.post("/login", async (req, res) => {
-    const {email, password} = req.body; 
+// router.post("/login", async (req, res) => {
+//     const {email, password} = req.body; 
 
-    try {
-        const usuario = await UserModel.findOne({email:email});
+//     try {
+//         const usuario = await UserModel.findOne({email:email});
 
-        if(!usuario) {
-            return res.status(400).send({message: "Y ese usuario de donde salio? "});
-        }
+//         if(!usuario) {
+//             return res.status(400).send({message: "Y ese usuario de donde salio? "});
+//         }
 
-        if(!isValidPassword(password, usuario)){
-            return res.status(401).send({message: "Credenciales invalidas "});
-        }
+//         if(!isValidPassword(password, usuario)){
+//             return res.status(401).send({message: "Credenciales invalidas "});
+//         }
 
-        //Si el usuario existe, y la contraseña es correcta, generamos el token:
+//         //Si el usuario existe, y la contraseña es correcta, generamos el token:
 
-        const token = generateToken({
-            first_name: usuario.first_name,
-            last_name: usuario.last_name,
-            email: usuario.email,
-            id: usuario._id
-        })
+//         const token = generateToken({
+//             first_name: usuario.first_name,
+//             last_name: usuario.last_name,
+//             email: usuario.email,
+//             id: usuario._id
+//         })
 
-        res.status(200).send({status: "success", token});
+//         res.status(200).send({status: "success", token});
 
-    } catch (error) {
-        console.log("Error en autenticación ", error);
-        res.status(500).send({status:"error", message: "Error interno del servidor"});
-    }
-})
+//     } catch (error) {
+//         console.log("Error en autenticación ", error);
+//         res.status(500).send({status:"error", message: "Error interno del servidor"});
+//     }
+// })
 
 //Login
-
-router.post("/login", async (req, res) => {
-    const { email, password } = req.body;
-    try {
-        //Primero buscamos al usuario: 
-        const usuario = await UserModel.findOne({ email: email });
-        if (usuario) {
-            //if (usuario.password === password) {
-            if(isValidPassword(password, usuario)) {
-                req.session.login = true;
-                req.session.user = { ...usuario._doc };
-
-                res.redirect("/profile");
-            } else {
-                res.status(401).send({ error: "Contraseña no valida" });
-            }
-        } else {
-            res.status(404).send({ error: "Usuario no encontrado" });
-        }
-    } catch (error) {
-        res.status(400).send({ error: "Error en el login" });
-    }
-})
+//
 
 
-///Version con Passport: 
+//Version con Passport: 
 
-// router.post("/login", passport.authenticate("login", {failureRedirect: "/api/sessions/faillogin"}), async (req, res) => {
+// router.post("/", passport.authenticate("login", {failureRedirect: "/api/sessions/faillogin"}), async (req, res) => {
 //     if(!req.user) return res.status(400).send({status:"error"});
 
 //     req.session.user = {
@@ -98,13 +98,13 @@ router.post("/login", async (req, res) => {
 
 //Version para GitHub:
 
-// router.get("/github", passport.authenticate("github", {scope: ["user:email"]}) ,async (req, res)=> {})
+router.get("/github", passport.authenticate("github", {scope: ["user:email"]}) ,async (req, res)=> {})
 
-// router.get("/githubcallback", passport.authenticate("github", {failureRedirect: "/login"}) ,async (req, res)=> {
-//     //La estrategia de GitHub me va a retornar el usuario, entonces lo agregamos a nuestra session. 
-//     req.session.user = req.user;
-//     req.session.login = true;
-//     res.redirect("/profile");
-// })
+router.get("/githubcallback", passport.authenticate("github", {failureRedirect: "/login"}) ,async (req, res)=> {
+    //La estrategia de GitHub me va a retornar el usuario, entonces lo agregamos a nuestra session. 
+    req.session.user = req.user;
+    req.session.login = true;
+    res.redirect("/profile");
+})
 
 module.exports = router;

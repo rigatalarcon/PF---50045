@@ -1,9 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const ProductManager = require("../controllers/product-manager-db.js");
-const CartManager = require("../controllers/cart-manager-db.js");
-const productManager = new ProductManager();
-const cartManager = new CartManager();
+const CartController = require("../controllers/cart.controller.js");
+const cartController = new CartController();
+const ProductController = require("../controllers/producto.controller.js");
+const productController = new ProductController;
+
+
+
+
+router.get("/", (req, res) => {
+    res.render("index");
+})
 
 // Ruta para el formulario de login
 router.get("/login", (req, res) => {
@@ -29,11 +36,19 @@ router.get("/profile", (req, res) => {
     res.render("profile", { user: req.session.user });
 });
 
+router.get("/realtimeproducts", async (req, res) => {
+    try {
+        res.render("realtimeproducts");
+    } catch (error) {
+        console.log("error en la vista real time", error);
+        res.status(500).json({error: "Error interno del servidor"});
+    }
+})
 
-router.get("/products", async (req, res) => {
+router.get("/", async (req, res) => {
     try {
         const { page = 1, limit = 2 } = req.query;
-        const productos = await productManager.getProducts({
+        const productos = await productController.getProductos({
             page: parseInt(page),
             limit: parseInt(limit)
         });
@@ -67,21 +82,21 @@ router.get("/carts/:cid", async (req, res) => {
     const cartId = req.params.cid;
 
     try {
-        const carrito = await cartManager.getCarritoById(cartId);
+        const carrito = await cartController.getCarritoById(cartId);
 
         if (!carrito) {
             console.log("No existe ese carrito con el id");
             return res.status(404).json({ error: "Carrito no encontrado" });
         }
 
-        const productosEnCarrito = carrito.products.map(item => ({
-            product: item.product.toObject(),
+        const productosEnCarrito = productController.map(item => ({
+            productController: item.product.toObject(),
             //Lo convertimos a objeto para pasar las restricciones de Exp Handlebars. 
             quantity: item.quantity
         }));
 
 
-        res.render("carts", { productos: productosEnCarrito });
+        res.render("carts", { productController: productosEnCarrito });
     } catch (error) {
         console.error("Error al obtener el carrito", error);
         res.status(500).json({ error: "Error interno del servidor" });

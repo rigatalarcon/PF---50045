@@ -7,58 +7,58 @@ const generateToken = require("../utils/jsonwebtoken.js");
 
 //Registro con JSON Web Token:
 
-router.post("/", async (req, res) => {
-    const {first_name, last_name, email, password, age} = req.body;
-
-    try {
-        const existeUsuario = await UserModel.findOne({email:email});
-        if(existeUsuario) {
-            return res.status(400).send({error: "email no disponible"});
-        }
-
-        //Creamos un nuevo usuario: 
-        const nuevoUsuario = await UserModel.create({first_name, last_name, email, password: createHash(password), age});
-
-        //Generamos el token: 
-        const token = generateToken({id: nuevoUsuario._id});
-
-        res.status(200).send({status: "success", message: "usuario creado", token})
-    } catch (error) {
-        console.log("Error en autenticación ", error);
-        res.status(500).send({status:"error", message: "Error interno del servidor"});
-    }
-})
-// //Post para generar un usuario y almacenarlo en MongoDB
-
 // router.post("/", async (req, res) => {
 //     const {first_name, last_name, email, password, age} = req.body;
 
 //     try {
-//         await UserModel.create({first_name, last_name, email, password, age})
-        
-//         res.status(200).send({message: "Usuario creado con exito!!"});
+//         const existeUsuario = await UserModel.findOne({email:email});
+//         if(existeUsuario) {
+//             return res.status(400).send({error: "email no disponible"});
+//         }
+
+//         //Creamos un nuevo usuario: 
+//         const nuevoUsuario = await UserModel.create({first_name, last_name, email, password: createHash(password), age});
+
+//         //Generamos el token: 
+//         const token = generateToken({id: nuevoUsuario._id});
+
+//         res.status(200).send({status: "success", message: "usuario creado", token})
 //     } catch (error) {
-//         res.status(400).send({error:"Error al crear el usuario"});
+//         console.log("Error en autenticación ", error);
+//         res.status(500).send({status:"error", message: "Error interno del servidor"});
 //     }
 // })
+// //Post para generar un usuario y almacenarlo en MongoDB
 
-// router.post("/", passport.authenticate("register", {failureRedirect: "/failedregister"}), async (req, res) => {
-//     if(!req.user) return res.status(400).send({status:"error"});
+router.post("/", async (req, res) => {
+    const {first_name, last_name, email, password, age} = req.body;
 
-//     req.session.user = {
-//         first_name: req.user.first_name,
-//         last_name: req.user.last_name,
-//         age: req.user.age,
-//         email:req.user.email
-//     };
+    try {
+        await UserModel.create({first_name, last_name, email, password, age})
+        
+        res.status(200).send({message: "Usuario creado con exito!!"});
+    } catch (error) {
+        res.status(400).send({error:"Error al crear el usuario"});
+    }
+})
 
-//     req.session.login = true;
+router.post("/", passport.authenticate("register", {failureRedirect: "/failedregister"}), async (req, res) => {
+    if(!req.user) return res.status(400).send({status:"error"});
 
-//     res.redirect("/profile");
-// })
+    req.session.user = {
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        age: req.user.age,
+        email:req.user.email
+    };
 
-// router.get("/failedregister", (req, res) => {
-//     res.send({error: "Registro fallido!"});
-// })
+    req.session.login = true;
+
+    res.redirect("/profile");
+})
+
+router.get("/failedregister", (req, res) => {
+    res.send({error: "Registro fallido!"});
+})
 
 module.exports = router; 
