@@ -1,73 +1,54 @@
-
 const express = require("express");
 const app = express();
 const exphbs = require("express-handlebars");
-//const socket = require("socket.io");
-const PUERTO = 8080;
-const session = require("express-session");
-// const FileStore = require("session-file-store");
-// const fileStore = FileStore(session);
-const MongoStore = require("connect-mongo");
 const cookieParser = require("cookie-parser");
-const initializePassport = require("./config/passport.config.js");
 const passport = require("passport");
-const sessionRouter = require("./routes/sessions.router.js");
-const userRouter = require("../src/routes/user.router.js");
+const initializePassport = require("./config/passport.config.js");
+const cors = require("cors");
+const path = require('path');
+const PUERTO = 8080;
+require("./database.js");
+
+
+
 const productsRouter = require("./routes/products.router.js");
 const cartsRouter = require("./routes/carts.router.js");
 const viewsRouter = require("./routes/views.router.js");
-const path = require("path");
-require("./database.js");
+const userRouter = require("./routes/user.router.js");
 
-//--------------------------------------------------------------------------------
-
-//Midleware
-app.use(express.static("./public"));
-app.use(express.json());
+//Middleware
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+//app.use(express.static("./src/public"));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
+
+//Passport 
+app.use(passport.initialize());
+initializePassport();
 app.use(cookieParser());
 
-app.use(session({
-    //1) Memory Storage: 
-    secret: "secretcoder",
-    //Es el valor para firmar la cookie. 
-    resave: true, 
-    //Esta config me permite mantener la sesión activa frente a la inactividad del usuario. 
-    saveUninitialized: true,    
-    //3) Utilizando Mongo Storage: 
-    store: MongoStore.create({
-        mongoUrl: "mongodb+srv://Coderhouse-50045:coderhouse@cluster0.u7fkdmd.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0", 
-        //ttl: 1000
-    })
+//AuthMiddleware
+// const authMiddleware = require("./middleware/authmiddleware.js");
+// app.use(authMiddleware);
 
-}))
-//Cambios passport: 
-initializePassport();
-app.use(passport.initialize());
-app.use(passport.session());
-
-//---------------------------------------------
-
-//handlebars
+//Handlebars
 app.engine("handlebars", exphbs.engine());
 app.set("view engine", "handlebars");
 app.set("views", "./src/views");
-//--------------------------------------------
 
-//Rutas
-app.use("/products", productsRouter);
-app.use("/carts", cartsRouter);
+
+//Rutas: 
+app.use("/api/products", productsRouter);
+app.use("/api/carts", cartsRouter);
+app.use("/api/users", userRouter);
 app.use("/", viewsRouter);
-app.use("/user", userRouter);
-app.use("/sessions", sessionRouter);
 
-//------------------------------------------
+///Websockets: 
+const SocketManager = require("./sockets/socketmanager.js");
+//new SocketManager(httpServer);
 
-//Iniciamos el servidor
-app.listen(PUERTO, () => {
-    console.log(`Escuchando en el puerto ${PUERTO} `);
-})
-
-//Websockets:
+const httpServer = app.listen(PUERTO, () => {
+    console.log(`Servidor escuchando en el puerto ${PUERTO}`);
+});
 

@@ -1,28 +1,27 @@
 <div class="container">
-    <h2>Registrate</h2>
-    <form>
+    <h2>Registro</h2>
+    <form action="/api/user" method="POST">
         <div class="form-group">
-            <label for="username">Nombre:</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" name="first_name" placeholder="Nombre" required>
+        </div>
+
+        <div class="form-group">
+            <input type="text" name="last_name" placeholder="Apellido" required>
+        </div>
+
+        <div class="form-group">
+            <input type="text" name="email" placeholder="Correo electónico" required>
+        </div>
+
+        <div class="form-group">
+            <input type="number" name="age" placeholder="Edad" required>
+        </div>
+
+        <div class="form-group">
+            <input type="text" name="password" placeholder="Contraseña" required>
         </div>
         <div class="form-group">
-            <label for="username">Apellido:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div class="form-group">
-            <label for="username">e-mail:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <div class="form-group">
-            <label for="username">Edad:</label>
-            <input type="number" id="username" name="username" required>
-        </div>
-        <div class="form-group">
-            <button type="submit">registrarse</button>
+            <button type="submit"> Registrarse </button>
         </div>
     </form>
 </div>

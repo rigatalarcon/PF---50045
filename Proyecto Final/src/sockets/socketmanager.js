@@ -1,34 +1,42 @@
+//const socket = require("socket.io");
 const socket = require("socket.io");
+const ProductRepository = require("../repositories/products.repository.js");
+const productRepository = new ProductRepository(); 
+const MessageModel = require("../models/message.model.js");
 
-//3) Se tiene que guardar una referencia del servidor de express. 
-//Configuramos: 
+class SocketManager {
+    constructor(httpServer) {
+        this.io = socket(httpServer);
+        this.initSocketEvents();
+    }
 
-//Creamos un array de usuarios: 
+    async initSocketEvents() {
+        this.io.on("connection", async (socket) => {
+            console.log("Un cliente se conectó");
+            
+            socket.emit("productos", await productRepository.obtenerProductos() );
 
-const usuarios = [
-    {id: 1, nombre: "Lionel", apellido: "Messi"},
-    {id: 2, nombre: "Cristiano", apellido: "Ronaldo"},
-    {id: 3, nombre: "Neymar", apellido: "Junior"},
-    {id: 4, nombre: "Kyliam", apellido: "Mbappe"},
-    {id: 5, nombre: "Pocho", apellido: "Lavezzi"},
-]
+            socket.on("eliminarProducto", async (id) => {
+                await productRepository.eliminarProducto(id);
+                this.emitUpdatedProducts(socket);
+            });
 
+            socket.on("agregarProducto", async (producto) => {
+                await productRepository.agregarProducto(producto);
+                this.emitUpdatedProducts(socket);
+            });
 
-const io = socket(httpServer);
+            socket.on("message", async (data) => {
+                await MessageModel.create(data);
+                const messages = await MessageModel.find();
+                socket.emit("message", messages);
+            });
+        });
+    }
 
-io.on("connection", (socket) => {
-    console.log("Un cliente se conectó conmigo");
-    
-    //No se olviden el nombre del "evento a escuchar", que tiene que ser el mismo desde el cliente al servidor. 
-    socket.on("mensaje", (data) => {
-        console.log(data);
-    })
+    async emitUpdatedProducts(socket) {
+        socket.emit("productos", await productRepository.obtenerProductos());
+    }
+}
 
-    //Ahora el servidor le va a enviar un mensaje al cliente: 
-    socket.emit("saludito", "Hola Cliente, ¿cómo estas?");
-
-    //Enviamos el array usuarios: 
-    socket.emit("usuarios", usuarios);
-})
-
-module.exports = io;
+module.exports = SocketManager;

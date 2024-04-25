@@ -1,34 +1,43 @@
 const mongoose = require("mongoose");
-const mongoosePaginate = require("mongoose-paginate-v2");
-const userCollection = 'user';
-
 
 const userSchema = mongoose.Schema({
     first_name: {
         type: String,
         required: true
     },
+
     last_name: {
         type: String,
         required: true
     },
+
     email: {
         type: String,
-        required: true, 
-        unique: true, 
-        index: true
+        required: true,
+        index: true,
+        unique: true
     },
+
     password: {
-        type: String, 
-        required: true
+        type: String,
+        //required: true
     },
+
     age: {
         type: Number,
         required: true
+    },
+    cart: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Cart'
+    },
+    role: {
+        type: String,
+        enum: ['admin', 'usuario'],
+        default: 'usuario'
     }
-})
+});
 
-userSchema.plugin(mongoosePaginate);
-const UserModel = mongoose.model(userCollection, userSchema);
+const UserModel = mongoose.model("user", userSchema);
 
 module.exports = UserModel;
