@@ -1,28 +1,25 @@
-/* Reset de estilos */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Roboto', sans-serif;
+
 }
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 10px 0;
+
+/*HEADER*/
+
+.tamLogo {
+    width: 150px;
 }
+
 .fuentesNav {
-    font-size: 1.5rem;
+    font-size: 2rem;
     padding: 10px;
 }
+
 .encabezado {
-    /* background-color: bisque; */
-    border-top: solid 20px #c1101a;
-    /* border-bottom: solid 1px #c1101a; */
+    background-color: bisque;
+    border-top: solid 20px #e72767;
+    border-bottom: solid 1px #c1101a;
     margin-bottom: 30px;
 }
 
@@ -40,10 +37,39 @@ a:hover {
     background-color: #c1101a;
     color: #fafafa;
 }
+
+/*Galeria img*/
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    max-width: 1200px;
+    padding: 20px;
+    width: 100%;
+}
+
+.gallery-item {
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item img:hover {
+    transform: scale(1.05);
+}
+
 /* PRODUCTOS */
 
 .tituloProductos {
-    background-color: #c1101a;
+    background-color: #e72767;
     color: #fafafa;
     text-align: center;
     font-weight: bold;
@@ -60,109 +86,317 @@ a:hover {
 
 
 .colorBtn {
-    background-color: #c1101a;
-    color: #fafafa;
+    background-color: #e2485a;
+    color: #020202;
     font-size: 18px;
 }
 
 .colorBtn:hover {
-    background-color: red;
+    background-color: rgb(205, 7, 245);
     color: #fafafa;
 }
 
-
 /*Cards*/
-
-.card-img-top {
-    height: 200px;
-    /* Ajusta la altura deseada */
-    object-fit: cover;
-    object-position: center top;
+/* Card container */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 16px;
 }
 
-/*formularios*/
-.container {
-    width: 300px;
-    margin: 100px auto;
+/* Individual card */
+.card {
     background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 300px;
+    transition: transform 0.3s;
 }
 
-.form-group button {
+.card:hover {
+    transform: scale(1.05);
+}
+
+/* Card image */
+.card-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Card content */
+.card-content {
+    padding: 16px;
+    text-align: center;
+}
+
+.card-content h2 {
+    margin: 0 0 10px 0;
+    font-size: 1.5em;
+}
+
+.card-content p {
+    margin: 0;
+    color: #555;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .card-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+
+
+/* Estilos del formulario de inicio de sesión */
+h1 {
+    text-align: center;
+}
+
+.formulario {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5c7c7de;
+    border-radius: 5px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #e42929;
+}
+
+.inputMessi {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.btnMios {
     width: 100%;
     padding: 10px;
-    border: none;
-    background-color: #007bff;
+    background-color: #dc82f3;
     color: #fff;
-    border-radius: 3px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
     cursor: pointer;
 }
 
-.form-group button:hover {
-    background-color: #0056b3;
+.btnMios:hover {
+    background-color: #ff1f33;
 }
 
-.profile {
-    width: 300px;
-    margin: 50px auto;
+i {
+    font-size: 35px;
+}
+
+/* estilos del perfil*/
+
+.profile-card {
+    max-width: 400px;
+    margin: 0 auto;
     padding: 20px;
-    border: 1px solid #ccc;
+    background-color: #f2f2f2;
     border-radius: 5px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
-.welcome-msg {
-    margin-top: 0;
-}
-
-.info {
+.profile-card p {
     margin-bottom: 10px;
 }
 
-#logout-btn {
-    padding: 8px 16px;
-    background-color: #007bff;
+.profile-card .btnMios {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #c1101a;
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
+    font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
-#logout-btn:hover {
-    background-color: #0056b3;
+.profile-card .btnMios:hover {
+    background-color: #ff1f33;
 }
-footer {
-    background-color: #333;
-    color: #fff;
+
+.profile-card a {
+    display: block;
+    margin-bottom: 10px;
+    color: #c1101a;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/*estilo real time products*/
+
+/* Títulos */
+h1,
+h2,
+h3 {
     text-align: center;
-    padding: 20px 0;
-    position: fixed;
-    bottom: 0;
+    margin-top: 20px;
+}
+
+/* Contenedor de productos */
+#contenedorProductos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+/* Estilos pagina de Productos - Tarjeta de producto */
+
+.card-containerproductos{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px; /* Añadir espacio entre tarjetas */
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 16px;
+}
+.card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 300px;
+    transition: transform 0.3s;
+}
+
+.card p {
+    margin: 0;
+    padding: 5px;
+}
+
+.card button {
+    display: block;
+    margin-top: 10px;
     width: 100%;
+    padding: 10px;
+    background-color: #c1101a;
+    color: #fafafa;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.card button:hover {
+    background-color: #ff1f33;
+}
+
+/* Formulario */
+form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+    outline: none;
+    border-color: #c1101a;
+}
+
+button#btnEnviar {
+    width: 100%;
+    padding: 10px;
+    background-color: #c1101a;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button#btnEnviar:hover {
+    background-color: #ff1f33;
+}
+
+/*pie de pagina*/
+
+.footer {
+    background-color: #e72767;
+    color: rgb(255, 255, 255);
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    text-align: center;
+    margin-top: 30px;
+
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+    margin: 5px;
+}
+
+.footer-section h3 {
+    border-bottom: 3px solid #ffffff;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.footer-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin: 5px 0;
+}
+
+.footer-section ul li a {
+    color: #ffffff;
+    text-decoration: tan;
+}
+
+.footer-section ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .footer {
+        flex-direction: column;
+        align-items: center;
+    }
 }

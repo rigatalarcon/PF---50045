@@ -4,23 +4,24 @@ const productRepository = new ProductRepository();
 class ProductController {
 
     async addProduct(req, res) {
-        const nuevoProducto = req.body;
-        try {
-            const resultado = await productRepository.agregarProducto(nuevoProducto);
-            res.json(resultado);
+        const newProduct = req.body;
 
+        try {
+            await productRepository.agregarProducto(newProduct);
+            
+            newProduct.getElementById('productForm').reset();
         } catch (error) {
-            res.status(500).send("Error");
+            res.status(500).send("Error al agregar producto");
         }
     }
 
-    async getProducts(req, res) {
+    async getProduct(req, res) {
         try {
             let { limit = 10, page = 1, sort, query } = req.query;
 
-            const productos = await productRepository.obtenerProductos(limit, page, sort, query);
+            const products = await productRepository.obtenerProductos(limit, page, sort, query);
 
-            res.json(productos);
+            res.status(200).json(products);
         } catch (error) {
             res.status(500).send("Error");
         }

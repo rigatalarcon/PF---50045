@@ -1,17 +1,17 @@
 <div class="container">
-    <h2>Login</h2>
-    <form action="/profile" method="POST">
-        <div class="form-group">
-            <label for="email">E-mail:</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <div class="form-group">
-            <button type="submit">Login</button>
-        </div>
+    <h1>Inicio de Sesión </h1>
+    <form class="formulario" action="/api/users/login" method="POST">
+
+        <label for="email">Email:</label>
+        <input type="text" class="inputMessi" id="email" name="email" placeholder="Correo electónico" required>
+        <label for="password" required>Contraseña:</label>
+        <input type="text" class="inputMessi" id="password" name="password" placeholder="Contraseña" required>
+        <br><br>
+        <button type="submit" class="btnMios">Login</button>
+        <br><br>
+        <p>¿Olvidaste la contraseña? <a href="/reset-password"> Restablecer Contraseña </a></p>
+
+        <br>
+        <a href="/api/sessions/github"> Loguear con GitHub </a>
     </form>
-    <a href="api/sessions/github"> GitHub </a>
 </div>
